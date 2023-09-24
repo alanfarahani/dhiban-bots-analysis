@@ -1,0 +1,626 @@
+---
+title: "Supplement A for 'A 2500 Historical Ecology of Agricultural Production under Empire in Dhiban, Jordan'"
+author: "Alan Farahani"
+output:
+  html_document: default
+  word_document: default
+  pdf_document: 
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,tidy.opts=list(width.cutoff=55), tidy = TRUE)
+```
+
+## Introduction
+
+This document provides additional information regarding and the full ability to reproduce the analyses conducted in Farahani, A. "A 2,500 Year Historical Ecology of Agricultural Production under Empire in Dhiban, Jordan".  The language in which this is written is R.  In the event that the R Markdown file is not available, this PDF document contains embedded code which must be copied into an R console (whether the regular R terminal or the R Studio IDE).  Once copied, the code below will reproduce nearly all of the analyses presented in the paper (and some additional ones as well).
+
+If there are any questions, please contact Alan Farahani at alanfarahani@gmail.com
+
+## Instructions for R Users
+
+Reproducing the data requires the following programs and / or packages to be present.  First it is highly recommended that R Studio (or IDE equivalent) is used, with the latest version of `knitr`.  Moreover, most of the analyses presented below rely on the `tidyverse` ecosystem, or at least `dplyr` and `reshape2`.  The packages `vegan` and `bootstrap` are also critical.  See the libraries loaded at the beginning of the document for the full range of required packages that must be installed prior to use.  
+
+Many of the commands have `%>% kable(.)` added to them, which enhances the readability of charts in compiled markdown files.  The latter should be *removed* in order to use any of these analyses effectively outside of the R Markdown environment.
+
+Finally, ensure that the data are in the same folder as the R Markdown in order for it to successfully compile.
+
+## Supplementary Information Regarding Sorting Methodology
+
+All archaeological plant remains were separated, quantified, and identified down to the 0.5mm level using a stereoscopic microscope. Wood charcoal was counted and weighed at the >2mm mesh size, and only weighed, but not counted, at the 1mm mesh size. Identifiable and unidentifiable seed fragments were collected until the 1mm mesh level.  When possible, seed fragments identifiable to some taxonomic level were recorded as fragments of that item (e.g. "Fabaceae fragments"").  The only taxa whose fragments were included into the count of whole seeds were Poaceae (grasses) -- in cases where a Poaceae seed was fragmented but the embryo / scutellum was visible, that item was recorded as "Poaceae apex"", but included in the count of whole Poaceae.  Unidentifiable seed fragments were distinguished from "clinkered"" remains, which were classified by severe distortion to the point of an inability of recognition.  The quantification of rachis (chaff) remains was predicated on the number of identifiable rachis internodes if found on a spike-chain.  Non-botanical, organic remains such as shell, dung, and carbonized insect remains were also counted and identified down to the 0.5mm mesh size, although operationalized into larger categories. 
+
+## General Summary Statistics of Assemblage
+
+```{r, echo = TRUE, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(reshape2)
+library(moments)
+library(vegan)
+library(bootstrap)
+library(knitr)
+library(kableExtra)
+
+#note that the data frame is called "dhb.peb" which is used throughout the analyses
+#if the CSV has another file name, be sure to either change the CSV name
+#or change the path below
+
+dhb.peb.mesh <- read.csv("farahani_raw_data_mesh_v3.csv")
+
+#the raw data includes each of the three sieve sizes used to process the material
+#this is removed for the subsequent analyses and all of the counts are aggregated
+#by sample number ("LF")
+
+dhb.peb <- dhb.peb.mesh %>% 
+  select(-Mesh) %>% 
+  group_by_at(1:13) %>% 
+  summarise_all(funs(sum)) %>%
+  ungroup
+
+#the period designations are reordered so as to follow their chronological sequence
+dhb.peb <- dhb.peb %>% 
+  mutate(Period = as.factor(Period)) %>%
+  mutate(Period = factor(Period, levels = levels(Period)[c(1,2,7,4,3,5,6)]))
+  
+
+all.summary <- dhb.peb %>% 
+    mutate(
+        `Crop Seeds` = rowSums(select(.,DOMESTICATE_COUNTS:DOMESTICATE_WEIGHTS), na.rm=TRUE),
+        `Weed Seeds` = rowSums(select(.,FAMILIES:UNKS_AND_FRAGS,-Poaceae_Frags), na.rm=TRUE),
+        `Seed Fragments (Identifiable)` = rowSums(select(.,DOM_FRAGS:FAMILIES, Poaceae_Frags,
+         -contains("wt")), na.rm=TRUE),
+        Rachises = rowSums(select(.,RACHIS_REMAINS:Wild_or_Weed_rachis, contains("rachis")),
+         na.rm=TRUE),
+        `Meso and Endocarp Fragments` = rowSums(select(.,contains("endo"), -contains("wt")),
+         na.rm=TRUE)
+        ) %>%
+    mutate(
+        `Seed Fragments (Unidentifiable)` = Clinker + Unidentifiable_seed_fragment, 
+        `Unidentified Seeds` = Unknown_fruit_seed + Unknown_non_Poaceae,
+        `Cereal Stems and Roots` = Poaceae_culm + Poaceae_root,
+        `Charcoal (>2mm)` = Charcoal_ct,
+        Parenchyma = Parenchyma_fragment
+    ) %>%
+    select(`Crop Seeds`:Parenchyma, Dung, Period) %>%
+    group_by(Period) %>%
+    summarise_if(is.numeric, funs(sum)) %>% as.data.frame()
+
+all.summary <- setNames(data.frame(t(all.summary[,-1])), all.summary[,1])
+
+all.summary %>% kable(.) %>% kable_styling(latex_options = "scale_down")
+```
+
+This is a graph of the latter table:
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 12, fig.height = 8}
+dhb.peb %>% 
+    mutate(
+        `Crop Seeds` = rowSums(select(.,DOMESTICATE_COUNTS:DOMESTICATE_WEIGHTS), na.rm=TRUE),
+        `Weed Seeds` = rowSums(select(.,FAMILIES:UNKS_AND_FRAGS,-Poaceae_Frags), na.rm=TRUE),
+        `Seed Fragments (Identifiable)` = rowSums(select(.,DOM_FRAGS:FAMILIES, 
+                                                         Poaceae_Frags, -contains("wt")), na.rm=TRUE),
+        Rachises = rowSums(select(.,RACHIS_REMAINS:Wild_or_Weed_rachis, 
+                                  contains("rachis")), na.rm=TRUE),
+        `Meso and Endocarp Fragments` = rowSums(select(.,contains("endo"), 
+                                                       -contains("wt")), na.rm=TRUE)
+    ) %>%
+    mutate(
+        `Seed Fragments (Unidentifiable)` = Clinker + Unidentifiable_seed_fragment, 
+        `Unidentified Seeds` = Unknown_fruit_seed + Unknown_non_Poaceae,
+        `Cereal Stems and Roots` = Poaceae_culm + Poaceae_root,
+        `Charcoal (>2mm)` = Charcoal_ct,
+        Parenchyma = Parenchyma_fragment
+    ) %>%
+    select(`Crop Seeds`:Parenchyma, Dung, Period) %>%
+    melt %>%
+    group_by(variable) %>%
+    summarise(N = sum(value)) %>%
+    mutate(Prop = N / sum(N)) %>%
+    ggplot(aes(reorder(variable,N),(Prop*100)))+
+    geom_bar(stat="identity",aes(y=(Prop*100)),fill="#8f8f8f",colour="black")+
+    theme_bw(base_size = 20) +
+    geom_text(size=5,aes(y=(Prop*100)+3,label=(paste("n=",N,sep="")))) +
+    ylab("Percent (%) of Total Identified Remains")+
+    xlab("")+
+    scale_y_continuous(expand=c(0,0)) +
+    theme(legend.position="none", panel.grid = element_blank(), panel.border = element_blank(), axis.line = element_line(color = 'black')) + 
+    coord_flip()
+```
+
+## Summary of Analyzed Contexts
+
+The following presents a table of the contexts that are associated with each of the periods, the amount of deposit sampled in each, and how many there were:
+
+```{r, echo = TRUE, message = FALSE, warning = FALSE}
+#first, by count
+dhb.peb %>%
+  mutate(N = 1) %>% 
+  group_by(Period, Context) %>%
+  summarise(N = sum(N), Volume = sum(Vol_L)) %>%
+  dcast(Period ~ Context, value.var = "N", fill = "-") %>% kable(.)
+
+#now, by volume
+dhb.peb %>%
+  mutate(N = 1) %>%
+  group_by(Period, Context) %>%
+  summarise(N = sum(N), Volume = sum(Vol_L)) %>%
+  dcast(Period ~ Context, value.var = "Volume", fill = "-") %>% kable(.)
+
+```
+
+
+## Identification of Depositional Routes
+
+The specific coding for what constitutes a "rachis" in this analysis can be found in the code below.
+
+```{r, echo = TRUE, message = FALSE, warning = FALSE}
+library(ggtern)
+
+dhb.peb %>% 
+    mutate(Weed_Seeds = rowSums(select(.,FAMILIES:UNKS_AND_FRAGS, -Poaceae_Frags), na.rm = TRUE)) %>%
+    mutate(Crop_Seeds = rowSums(select(.,DOMESTICATE_COUNTS:DOMESTICATE_WEIGHTS), na.rm = TRUE)) %>%
+    mutate(Rachises = Wild_or_Weed_rachis + Hordeum_rachis + Triticum_aestivum_durum_rachis +
+               Triticum_aestivum_rachis + Triticum_aestivum_durum_rachis_node + Triticum_durum_rachis +
+               Triticum_mono_di_rachis + Triticum_node + Triticum_rachis) %>%
+    filter(Period!="Ottoman"&Period!="Iron I") %>%
+    ggtern(aes(Rachises,Crop_Seeds,Weed_Seeds))+
+    geom_mask()+
+    geom_point(aes(colour=Period,shape=Period),size=4,alpha=.9)+
+    theme_light(base_size = 10)+
+    theme_showarrows()+
+    ylab("Crop Seeds")+
+    xlab("Rachis\n Remains")+
+    zlab("Weed\n Seeds")
+```
+
+
+## All Major Crops Encountered by Period
+
+All of the major crops present or absent in each period are displayed below.  Several are excluded however, such as "indeterminate cereal" and "large Fabaceae", both of which are not precise enough in their identification and may "double count" existing taxa.  Moreover, identifications of taxa which were not secure, such as *Punica granatum*, *Secale cereale*, and *Triticum spelta*, were excluded.
+
+```{r, echo = TRUE, message = FALSE, warning = FALSE, fig.width = 8}
+
+#this codes the Olea fragment as a count of at least one Olea for the Middle Islamic II Period
+#this is because there were Olea fragments found in the heavy fraction for this period
+#although this count is not reported as such in the overview of the domesticates in the article
+#as it was not found in the light fraction
+
+dhb.peb[dhb.peb$LF == 209, "Olea_sp"] <- 1
+
+excluded_taxa <- c("Indeterminate Cereal", "Punica granatum", "Secale cereale",
+                   "Triticum spelta", "Large Fabaceae")
+
+dhb.peb %>% select(Period, Cicer_arietinum:Ziziphus_spina_christi) %>% 
+    group_by(Period) %>% 
+    filter(Period != "Iron I") %>%
+    summarise_if(is.numeric, funs(sum)) %>% 
+    melt %>% 
+    mutate(value = ifelse(value>0,1,0)) %>% 
+    mutate( variable = gsub("_"," ",variable), 
+            variable = gsub("sp$", "sp.", variable),
+            variable = gsub("cf", "cf.", variable),
+            variable = gsub("ct", "", variable)
+    ) %>%
+    filter(!(variable %in% excluded_taxa)) %>%
+ggplot(aes(reorder(variable, desc(value)), Period)) + 
+    geom_tile(aes(fill = value), colour = "black") + 
+    scale_fill_continuous(low = "white", high = "green") + 
+    theme(legend.position = "none", axis.text.x = element_text(angle = 55, hjust = 1)) + 
+    xlab("") + ylab("")
+
+```
+
+## Summary Table of Domesticated Taxa
+
+The following produces a rather lengthy list of the identified remains aggregated by period.  The code relies on a later snippet that is used for the bootstrapping of the domesticate ubiquities.
+
+```{r, echo = TRUE, message = FALSE, warning = FALSE}
+tot.sum <- dhb.peb %>% filter(Period != "Iron I") %>%
+  mutate(
+    `Crop Seeds` = rowSums(select(.,DOMESTICATE_COUNTS:DOMESTICATE_WEIGHTS), na.rm=TRUE),
+    `Weed Seeds` = rowSums(select(.,FAMILIES:UNKS_AND_FRAGS,-Poaceae_Frags), na.rm=TRUE),
+    `Seed Fragments (Identifiable)` = rowSums(select(.,DOM_FRAGS:FAMILIES, Poaceae_Frags,
+                                                     -contains("wt")), na.rm=TRUE),
+    Rachises = rowSums(select(.,RACHIS_REMAINS:Wild_or_Weed_rachis,
+                              contains("rachis")), na.rm=TRUE),
+    `Meso and Endocarp Fragments` = rowSums(select(.,contains("endo"),
+                                                   -contains("wt")), na.rm=TRUE)
+  ) %>%
+  mutate(
+    `Seed Fragments (Unidentifiable)` = Clinker + Unidentifiable_seed_fragment, 
+    `Unidentified Seeds` = Unknown_fruit_seed + Unknown_non_Poaceae,
+    `Cereal Stems and Roots` = Poaceae_culm + Poaceae_root,
+    `Large Charcoal` = Charcoal_ct,
+    Parenchyma = Parenchyma_fragment,
+    N = 1
+  ) %>%
+  mutate(
+    Triticum_aestivum_durum_rachis = Triticum_aestivum_durum_rachis +
+      Triticum_aestivum_durum_rachis_node,
+    Triticum_indet_rachis = Triticum_rachis + Triticum_node
+  ) %>%
+  select(Period, Vol_L, N, DOMESTICATE_COUNTS:DOMESTICATE_WEIGHTS,
+         Triticum_aestivum_durum_rachis,
+         Triticum_aestivum_rachis, Triticum_durum_rachis,
+         Triticum_mono_di_rachis, Triticum_indet_rachis,
+         Hordeum_rachis, `Crop Seeds`:Parenchyma, Dung) %>%
+  group_by(Period) %>%
+  summarise_if(is.numeric, funs(sum)) %>%
+  melt() %>% 
+  filter(!(variable %in% c("Punica_granatum", "Secale_cereale", "Triticum_spelta"))) %>% 
+  dcast(Period ~ ..., fun.aggregate = sum) %>% t() %>% data.frame()
+
+names(tot.sum) <- as.character(unlist(tot.sum[1,]))
+tot.sum <- tot.sum[-1,]
+
+tot.sum %>% kable(.) %>% kable_styling(latex_options = "scale_down")
+```
+
+## Rarefaction
+
+The logic of rarefaction is presented in the paper and discussed extensively in several different sources, but here the `vegan` package is used for the calculation of individual-based and sample-based rarefaction. 
+
+```{r, echo = TRUE, warning = FALSE, message = FALSE}
+periods <- c("Middle Islamic II","Iron II","Late Byzantine", "Late Antique Transitional")
+
+#this codes the Olea fragment as a count of at least one Olea for the Middle Islamic Period
+dhb.peb[dhb.peb$LF == 209, "Olea_sp"] <- 1
+
+#create colors for our different strata
+redtrans <- rgb(255, 0, 0, 127, maxColorValue=255)
+chartrans <- rgb(102, 205, 0, 200, maxColorValue=255)
+lightbluetrans <- rgb(173, 216, 230, 200, maxColorValue=255)
+purpletrans <- rgb(200, 100, 200, 200, maxColorValue = 255)
+
+#The following code loops through each of the time periods
+#and creates a different species accumulation curve based on the domesticates only
+#(with some exluded, as can be seen in the select below) through random permutations
+#of the data weighted by flotation volume
+
+for (i in 1:length(periods)){
+    x <- dhb.peb %>% 
+        select(Period, Cicer_arietinum:Ziziphus_spina_christi,Vol_L,
+               -c(Secale_cereale, Punica_granatum, Indeterminate_Cereal,
+                  Coriandrum_sativum, Large_Fabaceae, Triticum_spelta)) %>%
+        mutate(Triticum_mono_di = Triticum_mono_di + Triticum_dicoccum) %>%
+        select(-Triticum_dicoccum) %>%
+        filter(Period == periods[i]) %>%
+        select(-Period)
+    
+    if(i == 1){
+         plot(specaccum(x, method = "random",w=x$Vol_L),xvar="effort",ci.type="poly",col="blue",
+              lwd=2, ci.lty=i, ci.col=purpletrans,
+              xlab = "Total Flotation Volume (L)", ylab = "Mean Richness",
+              cex.axis = 1.5, cex.lab = 1.5)
+    }
+    else if(i == 2){
+       plot(specaccum(x, method = "random",w=x$Vol_L),xvar="effort",ci.type="poly", col="darkred",
+            lwd=2, ci.lty=i, ci.col=redtrans, add=TRUE)
+    }
+    else if(i == 3){
+       plot(specaccum(x, method = "random",w=x$Vol_L),xvar="effort",ci.type="poly", col="yellow",
+            lwd=2, ci.lty=i, ci.col=lightbluetrans, add=TRUE)
+    }
+    else{
+        plot(specaccum(x, method = "random",w=x$Vol_L),xvar="effort",ci.type="poly", col="darkgreen",
+             lwd=2, ci.lty=i, ci.col=chartrans, add=TRUE)
+    }
+    
+}
+
+#classic rarefaction of the data, by individuals
+
+for (i in 1:length(periods)){
+    x <- dhb.peb %>% 
+         select(Period, Cicer_arietinum:Ziziphus_spina_christi,
+                -c(Secale_cereale, Punica_granatum, Indeterminate_Cereal,
+                   Coriandrum_sativum, Large_Fabaceae, Triticum_spelta)) %>%
+        mutate(Triticum_mono_di = Triticum_mono_di + Triticum_dicoccum) %>%
+        select(-Triticum_dicoccum) %>%
+        filter(Period == periods[i]) %>%
+        select(-Period)
+    
+    if(i == 1){
+        plot(specaccum(x, method = "rarefaction"),ci.type="poly",col="blue", lwd=2,
+             ci.lty=i, ci.col=purpletrans, xvar = "individuals",
+             xlab = "Total Number of Identified Specimens (NISP)", ylab = "Mean Richness",
+             cex.axis = 1.5, cex.lab = 1.5)
+    }
+    else if(i == 2){
+        plot(specaccum(x, method = "rarefaction"), xvar = "individuals",ci.type="poly",
+             col="darkred", lwd=2, ci.lty=i, ci.col=redtrans, add=TRUE)
+    }
+    else if(i == 3){
+        plot(specaccum(x, method = "rarefaction"), xvar = "individuals",ci.type="poly",
+             col="yellow", lwd=2, ci.lty=i, ci.col=lightbluetrans, add=TRUE)
+    }
+    else{
+        plot(specaccum(x, method = "rarefaction"), xvar = "individuals", ci.type="poly",
+             col="darkgreen", lwd=2, ci.lty=i, ci.col=chartrans, add=TRUE)
+    }
+    
+}
+
+```
+
+## Mean Inverse Simpson's
+
+In the event that the raw Estimate S data are not available, the following code can be run in order to procure the necessary data that must be modified for the Estimate S input system.  Unfortunately this can not be exhaustively discussed in this space, however the following code should generate the data needed for the software.
+
+```{r, eval = FALSE, echo = TRUE, message = FALSE, warning = FALSE}
+for (i in 1:length(levels(dhb.peb$Period))){
+   x <- dhb.peb %>% 
+         select(Period, Cicer_arietinum:Ziziphus_spina_christi,
+                -c(Secale_cereale, Punica_granatum, Indeterminate_Cereal,
+                   Coriandrum_sativum, Large_Fabaceae, Triticum_spelta)) %>%
+        mutate(Triticum_mono_di = Triticum_mono_di + Triticum_monococcum + Triticum_dicoccum) %>%
+        select(-c(Triticum_monococcum, Triticum_dicoccum)) %>%
+        filter(Period == periods[i]) %>%
+        select(-Period)
+  name <- paste(periods[i])
+  q <- t(x)
+  q <- q[-1,]
+  write.csv(q, file = paste0("C:/Users/Username/Desktop/EstimateSdata/",name,".csv"))
+  
+  rm(q, x, name)
+}
+
+```
+
+Once the EstimateS output has been calculated, a modified data frame can then be passed and plotted via regular `ggplot` methods.  Note here that the confidence interval of the inverse Simpson's index. is in fact predicated upon the standard deviation of the estimate.
+
+```{r, echo = TRUE, message = FALSE, warning = FALSE}
+estimate <- read.csv("estimate_s_output.csv")
+
+estimate %>% ggplot(aes(Individuals..computed.,Simpson.Inv.Mean)) +
+    geom_point(aes(colour = Period)) +
+    geom_ribbon(aes(ymin = Simpson.Inv.Mean - Simpson.Inv.SD..runs.,
+                    ymax = Simpson.Inv.Mean + Simpson.Inv.SD..runs.,
+                    colour = Period, fill = Period), size = 1,
+                alpha = .6) +
+    theme_bw(base_size = 18) +
+    theme(panel.grid = element_blank(), legend.position = "none") +
+    xlab("Number of Identified Specimens") +
+    ylab("Inverse Simpson's (Mean)") +
+    scale_fill_manual(values=c("#ff8081","#86d73c", "#bfdfea", "#d485d4"))
+```
+
+## Bootstrap ubiquities
+
+The use of a bootstrap for the ubiquity (proportional presence) required several steps. The steps are outlined below in the code itself.
+
+```{r,echo = TRUE}
+
+#first, isolate and aggregate the taxa of interest by their genus name
+dom <- dhb.peb %>% 
+  mutate(Triticum = rowSums(select(.,DOMESTICATE_COUNTS:DOMESTICATE_WEIGHTS) %>%
+                              select(.,contains("Triticum"))),
+         Hordeum = rowSums(select(.,DOMESTICATE_COUNTS:DOMESTICATE_WEIGHTS) %>%
+                             select(.,contains("Hordeum"))),
+         Ficus = rowSums(select(.,DOMESTICATE_COUNTS:DOMESTICATE_WEIGHTS) %>%
+                           select(.,contains("Ficus"))),
+         Lens = rowSums(select(.,DOMESTICATE_COUNTS:DOMESTICATE_WEIGHTS) %>%
+                          select(.,contains("Lens"))),
+         Pisum = rowSums(select(.,DOMESTICATE_COUNTS:DOMESTICATE_WEIGHTS) %>%
+                           select(.,contains("Pisum"))),
+         Vicia = rowSums(select(.,DOMESTICATE_COUNTS:DOMESTICATE_WEIGHTS) %>%
+                           select(.,contains("Vicia"))),
+         Vitis = rowSums(select(.,DOMESTICATE_COUNTS:DOMESTICATE_WEIGHTS) %>%
+                           select(.,contains("Vitis"))),
+         All_Doms = rowSums(select(.,DOMESTICATE_COUNTS:DOMESTICATE_WEIGHTS))) %>%
+  select(LF, Period, Vol_L, Triticum, Hordeum, Ficus, Lens, Pisum, Vicia, Vitis, All_Doms)
+
+#using these taxa, recode so that they are present or absent
+#and save this as a new data frame minus two periods
+
+temp <- dom %>% 
+    #the following line can be included as necessary
+    #mutate(Rem_Doms = All_Doms - rowSums(select(.,Triticum:Vitis))) %>%
+    select(-c(LF, Vol_L, All_Doms)) %>%
+    filter(Period != "Iron I" & Period != "Ottoman") %>%
+    mutate_if(is.numeric, funs(ifelse((.)>0,1,0))) %>%
+    droplevels(.) %>% as.data.frame(.)
+
+#now loop through the data frame, extracting each period
+#bootstrapping the taxa in each period, saving those in a list
+#and then combining the whole list 
+
+test <- vector("list", 6)
+
+for (i in 1:length(levels(temp$Period))){
+    per <-  levels(temp$Period)[i]
+    n <- filter(temp, Period == per)
+    for (z in 1:length(temp[,-1])){
+        p <- n
+        p <- p[,-1]
+        boo <- bootstrap(p[,z], 1000, function(x) mean(x))$thetastar
+        test[[i]][[z]] <- list(mean = mean(p[,z]),
+                               mean_boot = mean(boo),
+                               high = quantile(boo, .95),
+                               low = quantile(boo, .05),
+                               Period = per,
+                               Taxon = names(temp[z+1]),
+                               TimeOp = i,
+                               N = nrow(temp[temp$Period == per,]))
+        
+    }
+}
+
+#combine the list with bind_rows and map_df from purrr
+test <- test %>% 
+  map_df(bind_rows)
+  #pipe this in if necessary with %>%
+  #mutate_at(vars(mean:low), function(x) round(x*100, 1))
+
+test <- test %>% mutate(Period_N = as.factor(paste(Period, " (N = ", N,")", sep = "")), 
+                        Period = as.factor(Period)) %>% select(-N)
+test$Period_N <- factor(test$Period_N, levels = levels(test$Period_N)[c(1,6,3,2,4,5)])
+test$Period <- factor(test$Period, levels = levels(test$Period)[c(1,6,3,2,4,5)])
+
+rm(n,p,boo,i,per,z, temp)
+
+test %>% kable(.) %>% kable_styling(latex_options = "scale_down")
+
+```
+
+## Weighted Proportions of Abundance and General Counts
+
+The calculations for the weighted proportions can be seen in the code below, as well as that used to generate the graph.
+
+```{r, echo = TRUE, warning = FALSE, message = FALSE}
+dom.summary <- dom %>%
+    #mutate(Rem_Doms = All_Doms - rowSums(select(.,Triticum:Vitis))) %>%
+    filter(Period != "Iron I" & Period != "Ottoman") %>%
+    droplevels(.) %>%
+    add_count(Period) %>%
+    melt(id.vars = c("Period","LF", "All_Doms", "n", "Vol_L")) %>% 
+    mutate(Ubiq = ifelse(value > 0, 1, 0)) %>% 
+    group_by(Period, LF) %>%
+    mutate(Prop = ifelse(value == 0, 0, value/sum(value)), Prop_Ubiq = Ubiq / n) %>% 
+    ungroup() %>%
+    rename(Taxon =variable) %>%
+    group_by(Period, Taxon) %>%
+    summarise(N = unique(n),
+              Vol = sum(Vol_L),
+              CT = sum(value),
+              Ubiq = sum(Ubiq),
+              Ubiq_prop = Ubiq / N,
+              WT_Prop = weighted.mean(Prop, All_Doms),
+              #WT_Prop = weighted.mean(Prop, Taxon), #weighted by count of seeds per taxon
+              Mean_Prop = mean(Prop, na.rm = TRUE),
+              Mean_Dens = mean(value / Vol),
+              WT_Dens = weighted.mean((value/Vol), All_Doms)) %>%
+    mutate(CT_Prop = CT / sum(CT)) %>%
+    mutate_at(vars(Ubiq_prop:Mean_Prop,CT_Prop), funs(round(., 2))) %>% as.data.frame()
+
+dom.summary %>% kable(.) %>% kable_styling(latex_options = "scale_down")
+
+#this generates a graph that combines the bootstrapped ubiquity data
+#with aspects of the weighted proportion summary above
+
+test %>%
+    left_join(dom.summary %>% select(Period, Taxon, WT_Prop), by = c("Period", "Taxon")) %>%
+    ggplot(aes(Period,mean))+
+    geom_point(alpha=.95,shape = 21, aes(size = WT_Prop, fill = WT_Prop))+
+    scale_fill_continuous(low="red", high="green") +
+    theme_bw(base_size = 10)+
+    ylab("Proportion of Total Samples")+
+    xlab("")+
+    facet_wrap(~Taxon, nrow = 2) +
+    geom_hline(aes(yintercept=.5), colour="#990000", linetype="dashed")+
+    geom_errorbar(aes(ymin=low,ymax=high),width=.2) +
+    geom_line(aes(group=1)) + 
+    theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = "bottom") +
+    coord_flip() +
+    guides(fill=guide_legend(nrow = 1), size = guide_legend())
+
+```
+
+
+
+## Seed Morphometrics
+
+The seed morphometrics relies on a subset of several different kinds of measurements taken primarily on cereal grains, but also including grape and vetch seeds.  Several of the analyzed seeds are not included in the analysis, and their Period designation appears as `NA` due to the fact that those contexts were removed.  Their removal is predicated on clear bioturbation in the deposits from which they were collected, again visible in the AMS C14 chronology.
+
+```{r, echo = TRUE, message = FALSE, warning = FALSE}
+library(broom)
+library(DTK)
+
+#import the csv, either change the path or fliename
+morph <- read.csv("farahani_seed_morph_v2.csv")
+
+#attach the relevant time periods from the analyed material
+morph <- morph %>% left_join(dhb.peb %>% select(LF, Period), by = "LF")
+
+#basic pairwise comparison using a welch's t-test
+morph %>% filter(Genus == "Hordeum", !is.na(Thickness)) %>%
+    do(tidy(pairwise.t.test(.$Thickness, .$Period))) %>%
+  arrange(p.value) %>% kable(.)
+
+morph %>% filter(Genus == "Triticum", !is.na(Thickness)) %>%
+    do(tidy(pairwise.t.test(.$Thickness, .$Period))) %>%
+  arrange(p.value) %>% kable(.)
+
+#using the Type III SS for anova and thickness
+#the Type III SS for ANOVA does not use order of appeareance
+
+morph %>% filter(Genus == "Hordeum", !is.na(Thickness)) %>%
+    do(drop1(aov(Thickness ~ Period, data = .), ~., test = "F"))
+
+#a basic pairwise comparison is not correct because
+#of vastly unequal sample sizes, a Tukey HSD is a post-hoc correction for this
+
+morph %>% filter(Genus == "Hordeum", !is.na(Thickness)) %>%
+  do(tidy(TukeyHSD(aov(Thickness ~ Period, data = .)))) %>%
+    mutate(comparison = gsub("Nabataean-Roman", "NabataeanRoman", comparison)) %>%
+    separate(comparison, into = c("Per1", "Per2"), sep = "-") %>%
+    arrange(conf.low) %>%
+    filter(adj.p.value < .05) %>% kable(.)
+
+#this uses the Dunning method, which is more appropriate
+#for unbalanced sample designs with unequal sample variances
+test <- morph %>% filter(Genus == "Hordeum", !is.na(Thickness), !is.na(Period)) %>% 
+    droplevels %>%
+    do(tidy(DTK.test(.$Thickness,.$Period)[[2]])) %>%
+    mutate(.rownames = gsub("Nabataean-Roman", "NabataeanRoman", .rownames)) %>%
+    separate(.rownames, into = c("Per1", "Per2"), sep = "-")
+
+#this now loops through the Dunning output looking for those periods
+#which are significantly different in terms of thickness for barley
+vec <- vector("list", nrow(test))
+
+for(i in 1:nrow(test)){
+    vec[i] <- between(0,test$Lower.CI[i],test$Upper.CI[i])
+}
+
+test[unlist(vec) == FALSE,] %>% kable(.)
+
+#the variances across periods are similar for barley and wheat
+#but not between individual periods
+library(car)
+morph %>% filter(Genus == "Hordeum", !is.na(Thickness), !is.na(Period)) %>%
+    do(leveneTest(.$Thickness, .$Period, center = median))
+
+morph %>% filter(Genus == "Hordeum", !is.na(Thickness), !is.na(Period)) %>%
+    do(leveneTest(.$Thickness, .$Period, center = median))
+
+#and now, the f-tests, which are reported in the paper
+#this code could be improved with the map function from purrr,
+#especially splitting by genus -- I encourage someone to try!
+var.test(
+    morph %>% 
+      filter(Genus == "Hordeum", !is.na(Thickness), !is.na(Period)) %>%
+      filter(Period == "Late Antique Transitional") %>% pull(Thickness),
+    morph %>% 
+      filter(Genus == "Hordeum", !is.na(Thickness), !is.na(Period)) %>%
+      filter(Period == "Middle Islamic II") %>%
+      pull(Thickness)
+        )
+
+var.test(
+    morph %>% 
+      filter(Genus == "Triticum", !is.na(Thickness), !is.na(Period)) %>%
+      filter(Period == "Late Antique Transitional") %>% pull(Thickness),
+    morph %>% 
+      filter(Genus == "Triticum", !is.na(Thickness), !is.na(Period)) %>% 
+      filter(Period == "Middle Islamic II") %>% pull(Thickness)
+    )
+
+#this plots the data using a normal_cl_boot
+#hacky fix for the levels
+morph %>%
+    add_count(Genus, Period) %>%
+    filter(!is.na(Period), !is.na(Thickness)) %>%
+    mutate(Genus = ifelse(Genus == "Hordeum", "Barley", "Wheat")) %>%
+    mutate(Period2 = as.factor(paste(Period, "(n = ", n, ")"))) %>%
+    mutate(Period2 = factor(Period2, levels = levels(Period2)[c(1,2,11,12,3,4,5,6,7,8,9,10)])) %>%
+    ggplot(aes(Period2, Thickness)) +
+    geom_point(aes(colour = Period)) +
+    theme_bw(base_size = 10) +
+    stat_summary(fun.data = mean_cl_boot, colour = "red", size = .5, aes(shape = Period)) +
+    stat_summary(fun.y=mean, colour="red", geom="line", aes(group = 1)) +
+    theme(panel.grid = element_blank(), axis.text.x = element_text(angle = 45, hjust = 1),
+          legend.position = "none") +
+    facet_wrap(~Genus, scales="free_x") + ylab("Thickness (mm)") + xlab("")
+
+```
