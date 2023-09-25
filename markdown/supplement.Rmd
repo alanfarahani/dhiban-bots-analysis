@@ -1,5 +1,5 @@
 ---
-title: "Supplement A for 'A 2500 Historical Ecology of Agricultural Production under Empire in Dhiban, Jordan'"
+title: "Supplement for 'A 2500 Historical Ecology of Agricultural Production under Empire in Dhiban, Jordan'"
 author: "Alan Farahani"
 output:
   html_document: default
@@ -14,7 +14,7 @@ knitr::opts_chunk$set(echo = TRUE,tidy.opts=list(width.cutoff=55), tidy = TRUE)
 
 ## Introduction
 
-This document provides additional information regarding and the full ability to reproduce the analyses conducted in Farahani, A. "A 2,500 Year Historical Ecology of Agricultural Production under Empire in Dhiban, Jordan".  The language in which this is written is R.  In the event that the R Markdown file is not available, this PDF document contains embedded code which must be copied into an R console (whether the regular R terminal or the R Studio IDE).  Once copied, the code below will reproduce nearly all of the analyses presented in the paper (and some additional ones as well).
+This document provides additional information regarding and the full ability to reproduce the analyses conducted in Farahani, A. "A 2,500 Year Historical Ecology of Agricultural Production under Empire in Dhiban, Jordan".  The language in which this is written is R.  In the event that the R Markdown file is not available, this HTML document contains embedded code which must be copied into an R console (whether the regular R terminal or the R Studio IDE).  Once copied, the code below will reproduce nearly all of the analyses presented in the paper (and some additional ones as well).
 
 If there are any questions, please contact Alan Farahani at alanfarahani@gmail.com
 
@@ -45,25 +45,25 @@ library(kableExtra)
 #if the CSV has another file name, be sure to either change the CSV name
 #or change the path below
 
-dhb.peb.mesh <- read.csv("farahani_raw_data_mesh_v3.csv")
+dhb.peb.mesh = read.csv("dhb_raw_peb_data.csv")
 
 #the raw data includes each of the three sieve sizes used to process the material
 #this is removed for the subsequent analyses and all of the counts are aggregated
 #by sample number ("LF")
 
-dhb.peb <- dhb.peb.mesh %>% 
+dhb.peb = dhb.peb.mesh %>% 
   select(-Mesh) %>% 
   group_by_at(1:13) %>% 
   summarise_all(funs(sum)) %>%
   ungroup
 
 #the period designations are reordered so as to follow their chronological sequence
-dhb.peb <- dhb.peb %>% 
+dhb.peb = dhb.peb %>% 
   mutate(Period = as.factor(Period)) %>%
   mutate(Period = factor(Period, levels = levels(Period)[c(1,2,7,4,3,5,6)]))
   
 
-all.summary <- dhb.peb %>% 
+all.summary = dhb.peb %>% 
     mutate(
         `Crop Seeds` = rowSums(select(.,DOMESTICATE_COUNTS:DOMESTICATE_WEIGHTS), na.rm=TRUE),
         `Weed Seeds` = rowSums(select(.,FAMILIES:UNKS_AND_FRAGS,-Poaceae_Frags), na.rm=TRUE),
@@ -85,7 +85,7 @@ all.summary <- dhb.peb %>%
     group_by(Period) %>%
     summarise_if(is.numeric, funs(sum)) %>% as.data.frame()
 
-all.summary <- setNames(data.frame(t(all.summary[,-1])), all.summary[,1])
+all.summary = setNames(data.frame(t(all.summary[,-1])), all.summary[,1])
 
 all.summary %>% kable(.) %>% kable_styling(latex_options = "scale_down")
 ```
@@ -185,9 +185,9 @@ All of the major crops present or absent in each period are displayed below.  Se
 #although this count is not reported as such in the overview of the domesticates in the article
 #as it was not found in the light fraction
 
-dhb.peb[dhb.peb$LF == 209, "Olea_sp"] <- 1
+dhb.peb[dhb.peb$LF == 209, "Olea_sp"] = 1
 
-excluded_taxa <- c("Indeterminate Cereal", "Punica granatum", "Secale cereale",
+excluded_taxa = c("Indeterminate Cereal", "Punica granatum", "Secale cereale",
                    "Triticum spelta", "Large Fabaceae")
 
 dhb.peb %>% select(Period, Cicer_arietinum:Ziziphus_spina_christi) %>% 
@@ -215,7 +215,7 @@ ggplot(aes(reorder(variable, desc(value)), Period)) +
 The following produces a rather lengthy list of the identified remains aggregated by period.  The code relies on a later snippet that is used for the bootstrapping of the domesticate ubiquities.
 
 ```{r, echo = TRUE, message = FALSE, warning = FALSE}
-tot.sum <- dhb.peb %>% filter(Period != "Iron I") %>%
+tot.sum = dhb.peb %>% filter(Period != "Iron I") %>%
   mutate(
     `Crop Seeds` = rowSums(select(.,DOMESTICATE_COUNTS:DOMESTICATE_WEIGHTS), na.rm=TRUE),
     `Weed Seeds` = rowSums(select(.,FAMILIES:UNKS_AND_FRAGS,-Poaceae_Frags), na.rm=TRUE),
@@ -250,8 +250,8 @@ tot.sum <- dhb.peb %>% filter(Period != "Iron I") %>%
   filter(!(variable %in% c("Punica_granatum", "Secale_cereale", "Triticum_spelta"))) %>% 
   dcast(Period ~ ..., fun.aggregate = sum) %>% t() %>% data.frame()
 
-names(tot.sum) <- as.character(unlist(tot.sum[1,]))
-tot.sum <- tot.sum[-1,]
+names(tot.sum) = as.character(unlist(tot.sum[1,]))
+tot.sum = tot.sum[-1,]
 
 tot.sum %>% kable(.) %>% kable_styling(latex_options = "scale_down")
 ```
@@ -261,16 +261,16 @@ tot.sum %>% kable(.) %>% kable_styling(latex_options = "scale_down")
 The logic of rarefaction is presented in the paper and discussed extensively in several different sources, but here the `vegan` package is used for the calculation of individual-based and sample-based rarefaction. 
 
 ```{r, echo = TRUE, warning = FALSE, message = FALSE}
-periods <- c("Middle Islamic II","Iron II","Late Byzantine", "Late Antique Transitional")
+periods = c("Middle Islamic II","Iron II","Late Byzantine", "Late Antique Transitional")
 
 #this codes the Olea fragment as a count of at least one Olea for the Middle Islamic Period
-dhb.peb[dhb.peb$LF == 209, "Olea_sp"] <- 1
+dhb.peb[dhb.peb$LF == 209, "Olea_sp"] = 1
 
 #create colors for our different strata
-redtrans <- rgb(255, 0, 0, 127, maxColorValue=255)
-chartrans <- rgb(102, 205, 0, 200, maxColorValue=255)
-lightbluetrans <- rgb(173, 216, 230, 200, maxColorValue=255)
-purpletrans <- rgb(200, 100, 200, 200, maxColorValue = 255)
+redtrans = rgb(255, 0, 0, 127, maxColorValue=255)
+chartrans = rgb(102, 205, 0, 200, maxColorValue=255)
+lightbluetrans = rgb(173, 216, 230, 200, maxColorValue=255)
+purpletrans = rgb(200, 100, 200, 200, maxColorValue = 255)
 
 #The following code loops through each of the time periods
 #and creates a different species accumulation curve based on the domesticates only
@@ -278,7 +278,7 @@ purpletrans <- rgb(200, 100, 200, 200, maxColorValue = 255)
 #of the data weighted by flotation volume
 
 for (i in 1:length(periods)){
-    x <- dhb.peb %>% 
+    x = dhb.peb %>% 
         select(Period, Cicer_arietinum:Ziziphus_spina_christi,Vol_L,
                -c(Secale_cereale, Punica_granatum, Indeterminate_Cereal,
                   Coriandrum_sativum, Large_Fabaceae, Triticum_spelta)) %>%
@@ -311,7 +311,7 @@ for (i in 1:length(periods)){
 #classic rarefaction of the data, by individuals
 
 for (i in 1:length(periods)){
-    x <- dhb.peb %>% 
+    x = dhb.peb %>% 
          select(Period, Cicer_arietinum:Ziziphus_spina_christi,
                 -c(Secale_cereale, Punica_granatum, Indeterminate_Cereal,
                    Coriandrum_sativum, Large_Fabaceae, Triticum_spelta)) %>%
@@ -349,7 +349,7 @@ In the event that the raw Estimate S data are not available, the following code 
 
 ```{r, eval = FALSE, echo = TRUE, message = FALSE, warning = FALSE}
 for (i in 1:length(levels(dhb.peb$Period))){
-   x <- dhb.peb %>% 
+   x = dhb.peb %>% 
          select(Period, Cicer_arietinum:Ziziphus_spina_christi,
                 -c(Secale_cereale, Punica_granatum, Indeterminate_Cereal,
                    Coriandrum_sativum, Large_Fabaceae, Triticum_spelta)) %>%
@@ -357,9 +357,9 @@ for (i in 1:length(levels(dhb.peb$Period))){
         select(-c(Triticum_monococcum, Triticum_dicoccum)) %>%
         filter(Period == periods[i]) %>%
         select(-Period)
-  name <- paste(periods[i])
-  q <- t(x)
-  q <- q[-1,]
+  name = paste(periods[i])
+  q = t(x)
+  q = q[-1,]
   write.csv(q, file = paste0("C:/Users/Username/Desktop/EstimateSdata/",name,".csv"))
   
   rm(q, x, name)
@@ -370,7 +370,7 @@ for (i in 1:length(levels(dhb.peb$Period))){
 Once the EstimateS output has been calculated, a modified data frame can then be passed and plotted via regular `ggplot` methods.  Note here that the confidence interval of the inverse Simpson's index. is in fact predicated upon the standard deviation of the estimate.
 
 ```{r, echo = TRUE, message = FALSE, warning = FALSE}
-estimate <- read.csv("estimate_s_output.csv")
+estimate = read.csv("estimate_s_output.csv")
 
 estimate %>% ggplot(aes(Individuals..computed.,Simpson.Inv.Mean)) +
     geom_point(aes(colour = Period)) +
@@ -392,7 +392,7 @@ The use of a bootstrap for the ubiquity (proportional presence) required several
 ```{r,echo = TRUE}
 
 #first, isolate and aggregate the taxa of interest by their genus name
-dom <- dhb.peb %>% 
+dom = dhb.peb %>% 
   mutate(Triticum = rowSums(select(.,DOMESTICATE_COUNTS:DOMESTICATE_WEIGHTS) %>%
                               select(.,contains("Triticum"))),
          Hordeum = rowSums(select(.,DOMESTICATE_COUNTS:DOMESTICATE_WEIGHTS) %>%
@@ -413,7 +413,7 @@ dom <- dhb.peb %>%
 #using these taxa, recode so that they are present or absent
 #and save this as a new data frame minus two periods
 
-temp <- dom %>% 
+temp = dom %>% 
     #the following line can be included as necessary
     #mutate(Rem_Doms = All_Doms - rowSums(select(.,Triticum:Vitis))) %>%
     select(-c(LF, Vol_L, All_Doms)) %>%
@@ -425,16 +425,16 @@ temp <- dom %>%
 #bootstrapping the taxa in each period, saving those in a list
 #and then combining the whole list 
 
-test <- vector("list", 6)
+test = vector("list", 6)
 
 for (i in 1:length(levels(temp$Period))){
-    per <-  levels(temp$Period)[i]
-    n <- filter(temp, Period == per)
+    per =  levels(temp$Period)[i]
+    n = filter(temp, Period == per)
     for (z in 1:length(temp[,-1])){
-        p <- n
-        p <- p[,-1]
-        boo <- bootstrap(p[,z], 1000, function(x) mean(x))$thetastar
-        test[[i]][[z]] <- list(mean = mean(p[,z]),
+        p = n
+        p = p[,-1]
+        boo = bootstrap(p[,z], 1000, function(x) mean(x))$thetastar
+        test[[i]][[z]] = list(mean = mean(p[,z]),
                                mean_boot = mean(boo),
                                high = quantile(boo, .95),
                                low = quantile(boo, .05),
@@ -447,15 +447,15 @@ for (i in 1:length(levels(temp$Period))){
 }
 
 #combine the list with bind_rows and map_df from purrr
-test <- test %>% 
+test = test %>% 
   map_df(bind_rows)
   #pipe this in if necessary with %>%
   #mutate_at(vars(mean:low), function(x) round(x*100, 1))
 
-test <- test %>% mutate(Period_N = as.factor(paste(Period, " (N = ", N,")", sep = "")), 
+test = test %>% mutate(Period_N = as.factor(paste(Period, " (N = ", N,")", sep = "")), 
                         Period = as.factor(Period)) %>% select(-N)
-test$Period_N <- factor(test$Period_N, levels = levels(test$Period_N)[c(1,6,3,2,4,5)])
-test$Period <- factor(test$Period, levels = levels(test$Period)[c(1,6,3,2,4,5)])
+test$Period_N = factor(test$Period_N, levels = levels(test$Period_N)[c(1,6,3,2,4,5)])
+test$Period = factor(test$Period, levels = levels(test$Period)[c(1,6,3,2,4,5)])
 
 rm(n,p,boo,i,per,z, temp)
 
@@ -468,7 +468,7 @@ test %>% kable(.) %>% kable_styling(latex_options = "scale_down")
 The calculations for the weighted proportions can be seen in the code below, as well as that used to generate the graph.
 
 ```{r, echo = TRUE, warning = FALSE, message = FALSE}
-dom.summary <- dom %>%
+dom.summary = dom %>%
     #mutate(Rem_Doms = All_Doms - rowSums(select(.,Triticum:Vitis))) %>%
     filter(Period != "Iron I" & Period != "Ottoman") %>%
     droplevels(.) %>%
@@ -527,10 +527,10 @@ library(broom)
 library(DTK)
 
 #import the csv, either change the path or fliename
-morph <- read.csv("farahani_seed_morph_v2.csv")
+morph = read.csv("farahani_seed_morph_v2.csv")
 
 #attach the relevant time periods from the analyed material
-morph <- morph %>% left_join(dhb.peb %>% select(LF, Period), by = "LF")
+morph = morph %>% left_join(dhb.peb %>% select(LF, Period), by = "LF")
 
 #basic pairwise comparison using a welch's t-test
 morph %>% filter(Genus == "Hordeum", !is.na(Thickness)) %>%
@@ -559,7 +559,7 @@ morph %>% filter(Genus == "Hordeum", !is.na(Thickness)) %>%
 
 #this uses the Dunning method, which is more appropriate
 #for unbalanced sample designs with unequal sample variances
-test <- morph %>% filter(Genus == "Hordeum", !is.na(Thickness), !is.na(Period)) %>% 
+test = morph %>% filter(Genus == "Hordeum", !is.na(Thickness), !is.na(Period)) %>% 
     droplevels %>%
     do(tidy(DTK.test(.$Thickness,.$Period)[[2]])) %>%
     mutate(.rownames = gsub("Nabataean-Roman", "NabataeanRoman", .rownames)) %>%
@@ -567,10 +567,10 @@ test <- morph %>% filter(Genus == "Hordeum", !is.na(Thickness), !is.na(Period)) 
 
 #this now loops through the Dunning output looking for those periods
 #which are significantly different in terms of thickness for barley
-vec <- vector("list", nrow(test))
+vec = vector("list", nrow(test))
 
 for(i in 1:nrow(test)){
-    vec[i] <- between(0,test$Lower.CI[i],test$Upper.CI[i])
+    vec[i] = between(0,test$Lower.CI[i],test$Upper.CI[i])
 }
 
 test[unlist(vec) == FALSE,] %>% kable(.)
