@@ -1,5 +1,5 @@
 ---
-title: "Supplement for 'A 2500 Historical Ecology of Agricultural Production under Empire in Dhiban, Jordan'"
+title: "Supplement for 'A 2500-Year historical ecology of agricultural production under Empire in Dhiban, Jordan'"
 author: "Alan Farahani"
 output:
   html_document: default
@@ -14,7 +14,7 @@ knitr::opts_chunk$set(echo = TRUE,tidy.opts=list(width.cutoff=55), tidy = TRUE)
 
 ## Introduction
 
-This document provides additional information regarding and the full ability to reproduce the analyses conducted in Farahani, A. "A 2,500 Year Historical Ecology of Agricultural Production under Empire in Dhiban, Jordan".  The language in which this is written is R.  In the event that the R Markdown file is not available, this HTML document contains embedded code which must be copied into an R console (whether the regular R terminal or the R Studio IDE).  Once copied, the code below will reproduce nearly all of the analyses presented in the paper (and some additional ones as well).
+This document provides additional information regarding and the full ability to reproduce the analyses conducted in [Farahani, A. 2018. A 2500-Year historical ecology of agricultural production under Empire in Dhiban, Jordan. Journal of Anthropological Archaeology 52: 137-155.](https://pdf.sciencedirectassets.com/272558/1-s2.0-S0278416518X0004X/1-s2.0-S0278416518300515/am.pdf?X-Amz-Security-Token=IQoJb3JpZ2luX2VjEFkaCXVzLWVhc3QtMSJIMEYCIQC2Xnrcx1VLx%2FgXD10gpYPjEsxGO549J1IgQQ7AX7kShwIhANJ0wLR68Ij8MTjfV4dsveZ1C9Imj2CLK3MZhIHu6udgKrMFCFIQBRoMMDU5MDAzNTQ2ODY1Igyzco%2FxJnHa4%2FJyd2kqkAUU5a%2BGsYnWtYcgvPaQ4LvQ4yQbkexBWh%2F0jHj3tLpUQN9NHRe%2FxLvBwbRiXRhyhNgYuKZO5ajN6jwq7mDO6JxS9jX1UewCUb9G7MwTxhHqNUhseAHndL2df3v0WAL4pSawj5WeGJoGKcbCbOiw%2F6e9ZO0A13jxpRJ5Tfg1Nvi%2Bd1gfrgKRR6%2FDhAhxLR4Updht0TdlbyKdBgVoItb%2Flkb2u0OBc%2ByL6zktDIRmNCK7PhADE%2B50QHWY320HJg%2Fst93sUCDqKSZCEBNuJF%2B95%2BA9rPg3LL7mhvsz9kmr1V3Gg04JNKRL%2BoU%2Fdj1lQSAnGUzQP8Q3shBGwDZ3Jwaj7X2EjJDelcdYJjZbd2JUZT0JZZ%2B0IsMb2fjcl%2Fh1FqYpZ1CVwvUA7w%2BDFzcY5jbkaVXcDeP4FakGN3ZqUPmDz7q0aiRIhM2sw13aVl1FAx1%2Fuu6qpVxZwm2h4J0kaOL9ouHyp2231bQ1PrgzIL4uGG31RMRyvRItWGGWRTXdqs8adsLkSg5NHCYmpop8q6VbGZN6RY4HABZmEXIfldWpHng9aDz%2FkWN5L0L%2FR1q1G2Yt1Nt5A6UnBoH0hdm4wDYFGjoJEH8W0OagZAtu%2FgNfOPW%2F72rf2lcsaXAHUNJ9ZEbeecwxq7%2FCF%2Bxgl22bs5fkbff6um9VjRGke32AKVnXDPakTAMQFvcioApgP84yU3K8YWckgidk6cPidC%2F06DozRtH8tIBsjTHlviN5fKggukzI91vlx%2Ba%2B6N6Iifh4YH5x%2BoVMdq6%2B3hiukFhXALJY0FOj2EC93kmJjAeFBE62CQ1bmR6ewjVqGiY0sQPTxLPQvm1LKCIf0KJQfFeqAuFUiocuHN2n5tL9%2Bkmb2zR8mR%2F9NzC6q8OoBjqwAdWxvTarQcJkI0Yxy3DnQO9qUUTddZTsG33cLtcB2v95qDVvz6psHcCDGdf7x0VT38%2B8kSgoR83TOFHNeVWLX2w%2FkR3iN7KzTrwiRcieKNACtGkfTcPFEcywqqLgNUQh101XFRMSuYeku5AVcB%2BaFnJ4f4pKiFStwVWo01ehmTx0rVnNLj31LMSjYiPAq%2B9Su0Osm6qQWOWIoMM0UbJYIbUmkIGytijPCfoIJC1YT2Fg&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20230925T004522Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Credential=ASIAQ3PHCVTYSUR6AKC4%2F20230925%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=a6f161210de8bd29595c2a9c618f9f9b0a5809c893f4e0366e095c82c72764f7&hash=81283dba0c76ca73f6fa2c787dafc58d2f3aa9cb3514b6feecf57a53dbe385a8&host=68042c943591013ac2b2430a89b270f6af2c76d8dfd086a07176afe7c76c2c61&pii=S0278416518300515&tid=pdf-797ec5c6-6161-441b-a345-f83554c6ebb8&sid=fd531bfa1b667540714a0e28ad4dab3d57a9gxrqa&type=client).  The language in which this is written is R.  In the event that the R Markdown file is not available, this HTML document contains embedded code which must be copied into an R console (whether the regular R terminal or the R Studio IDE).  Once copied, the code below will reproduce nearly all of the analyses presented in the paper (and some additional ones as well).
 
 If there are any questions, please contact Alan Farahani at alanfarahani@gmail.com
 
@@ -22,7 +22,7 @@ If there are any questions, please contact Alan Farahani at alanfarahani@gmail.c
 
 Reproducing the data requires the following programs and / or packages to be present.  First it is highly recommended that R Studio (or IDE equivalent) is used, with the latest version of `knitr`.  Moreover, most of the analyses presented below rely on the `tidyverse` ecosystem, or at least `dplyr` and `reshape2`.  The packages `vegan` and `bootstrap` are also critical.  See the libraries loaded at the beginning of the document for the full range of required packages that must be installed prior to use.  
 
-Many of the commands have `%>% kable(.)` added to them, which enhances the readability of charts in compiled markdown files.  The latter should be *removed* in order to use any of these analyses effectively outside of the R Markdown environment.
+Many of the commands have `%>% kable(.)` added to them, which enhances the readability of tables in compiled markdown files.  Any call or pipe to `kable` should be *removed* in order to use any of these analyses outside of the R Markdown environment.
 
 Finally, ensure that the data are in the same folder as the R Markdown in order for it to successfully compile.
 
@@ -39,13 +39,12 @@ library(moments)
 library(vegan)
 library(bootstrap)
 library(knitr)
-library(kableExtra)
 
 #note that the data frame is called "dhb.peb" which is used throughout the analyses
 #if the CSV has another file name, be sure to either change the CSV name
 #or change the path below
 
-dhb.peb.mesh = read.csv("dhb_raw_peb_data.csv")
+dhb.peb.mesh = read.csv("../data/dhb_raw_peb_data.csv")
 
 #the raw data includes each of the three sieve sizes used to process the material
 #this is removed for the subsequent analyses and all of the counts are aggregated
@@ -87,7 +86,7 @@ all.summary = dhb.peb %>%
 
 all.summary = setNames(data.frame(t(all.summary[,-1])), all.summary[,1])
 
-all.summary %>% kable(.) %>% kable_styling(latex_options = "scale_down")
+all.summary %>% kable(.)
 ```
 
 This is a graph of the latter table:
@@ -253,7 +252,7 @@ tot.sum = dhb.peb %>% filter(Period != "Iron I") %>%
 names(tot.sum) = as.character(unlist(tot.sum[1,]))
 tot.sum = tot.sum[-1,]
 
-tot.sum %>% kable(.) %>% kable_styling(latex_options = "scale_down")
+tot.sum %>% kable(.)
 ```
 
 ## Rarefaction
@@ -274,7 +273,7 @@ purpletrans = rgb(200, 100, 200, 200, maxColorValue = 255)
 
 #The following code loops through each of the time periods
 #and creates a different species accumulation curve based on the domesticates only
-#(with some exluded, as can be seen in the select below) through random permutations
+#(with some excluded, as can be seen in the select below) through random permutations
 #of the data weighted by flotation volume
 
 for (i in 1:length(periods)){
@@ -287,8 +286,13 @@ for (i in 1:length(periods)){
         filter(Period == periods[i]) %>%
         select(-Period)
     
+    spec_rich_accum = specaccum(x, method = "random",w=x$Vol_L)
+    
+    spec_rich_accum$richness = ifelse(is.na(spec_rich_accum$richness), 0, spec_rich_accum$richness)
+    spec_rich_accum$sd = ifelse(is.na(spec_rich_accum$sd), 0, spec_rich_accum$sd)
+    
     if(i == 1){
-         plot(specaccum(x, method = "random",w=x$Vol_L),xvar="effort",ci.type="poly",col="blue",
+         plot(spec_rich_accum,xvar="effort",ci.type="poly",col="blue",
               lwd=2, ci.lty=i, ci.col=purpletrans,
               xlab = "Total Flotation Volume (L)", ylab = "Mean Richness",
               cex.axis = 1.5, cex.lab = 1.5)
@@ -320,22 +324,27 @@ for (i in 1:length(periods)){
         filter(Period == periods[i]) %>%
         select(-Period)
     
+    spec_rich_rare = specaccum(x, method = "rarefaction")
+    
+    spec_rich_rare$richness = ifelse(is.na(spec_rich_rare$richness), 0, spec_rich_rare$richness)
+    spec_rich_rare$sd = ifelse(is.na(spec_rich_rare$sd), 0, spec_rich_rare$sd)
+    
     if(i == 1){
-        plot(specaccum(x, method = "rarefaction"),ci.type="poly",col="blue", lwd=2,
+        plot(spec_rich_rare,ci.type="poly",col="blue", lwd=2,
              ci.lty=i, ci.col=purpletrans, xvar = "individuals",
              xlab = "Total Number of Identified Specimens (NISP)", ylab = "Mean Richness",
              cex.axis = 1.5, cex.lab = 1.5)
     }
     else if(i == 2){
-        plot(specaccum(x, method = "rarefaction"), xvar = "individuals",ci.type="poly",
+        plot(spec_rich_rare, xvar = "individuals",ci.type="poly",
              col="darkred", lwd=2, ci.lty=i, ci.col=redtrans, add=TRUE)
     }
     else if(i == 3){
-        plot(specaccum(x, method = "rarefaction"), xvar = "individuals",ci.type="poly",
+        plot(spec_rich_rare, xvar = "individuals",ci.type="poly",
              col="yellow", lwd=2, ci.lty=i, ci.col=lightbluetrans, add=TRUE)
     }
     else{
-        plot(specaccum(x, method = "rarefaction"), xvar = "individuals", ci.type="poly",
+        plot(spec_rich_rare, xvar = "individuals", ci.type="poly",
              col="darkgreen", lwd=2, ci.lty=i, ci.col=chartrans, add=TRUE)
     }
     
@@ -358,9 +367,15 @@ for (i in 1:length(levels(dhb.peb$Period))){
         filter(Period == periods[i]) %>%
         select(-Period)
   name = paste(periods[i])
+  
   q = t(x)
+  
   q = q[-1,]
-  write.csv(q, file = paste0("C:/Users/Username/Desktop/EstimateSdata/",name,".csv"))
+  
+  # be sure to change the path location!
+  mypath = 'C:/Your/path/here/'
+  
+  write.csv(q, file = paste0(mypath,name,".csv"))
   
   rm(q, x, name)
 }
@@ -370,7 +385,7 @@ for (i in 1:length(levels(dhb.peb$Period))){
 Once the EstimateS output has been calculated, a modified data frame can then be passed and plotted via regular `ggplot` methods.  Note here that the confidence interval of the inverse Simpson's index. is in fact predicated upon the standard deviation of the estimate.
 
 ```{r, echo = TRUE, message = FALSE, warning = FALSE}
-estimate = read.csv("estimate_s_output.csv")
+estimate = read.csv("../data/estimate_s_output.csv")
 
 estimate %>% ggplot(aes(Individuals..computed.,Simpson.Inv.Mean)) +
     geom_point(aes(colour = Period)) +
@@ -459,7 +474,7 @@ test$Period = factor(test$Period, levels = levels(test$Period)[c(1,6,3,2,4,5)])
 
 rm(n,p,boo,i,per,z, temp)
 
-test %>% kable(.) %>% kable_styling(latex_options = "scale_down")
+test %>% kable(.)
 
 ```
 
@@ -493,7 +508,7 @@ dom.summary = dom %>%
     mutate(CT_Prop = CT / sum(CT)) %>%
     mutate_at(vars(Ubiq_prop:Mean_Prop,CT_Prop), funs(round(., 2))) %>% as.data.frame()
 
-dom.summary %>% kable(.) %>% kable_styling(latex_options = "scale_down")
+dom.summary %>% kable(.)
 
 #this generates a graph that combines the bootstrapped ubiquity data
 #with aspects of the weighted proportion summary above
@@ -524,10 +539,16 @@ The seed morphometrics relies on a subset of several different kinds of measurem
 
 ```{r, echo = TRUE, message = FALSE, warning = FALSE}
 library(broom)
+
+# unfortunately the DTK package has been archived on CRAN since 2022
+# as the creators did not address check problems
+# to install a previous version please run the following:
+# require(devtools)
+# install_version("DTK", version = "3.5", repos = "http://cran.us.r-project.org")
 library(DTK)
 
 #import the csv, either change the path or fliename
-morph = read.csv("farahani_seed_morph_v2.csv")
+morph = read.csv("../data/dhb_seed_morph.csv")
 
 #attach the relevant time periods from the analyed material
 morph = morph %>% left_join(dhb.peb %>% select(LF, Period), by = "LF")
@@ -542,38 +563,42 @@ morph %>% filter(Genus == "Triticum", !is.na(Thickness)) %>%
   arrange(p.value) %>% kable(.)
 
 #using the Type III SS for anova and thickness
-#the Type III SS for ANOVA does not use order of appeareance
+#the Type III SS for ANOVA does not use order of appearance
 
 morph %>% filter(Genus == "Hordeum", !is.na(Thickness)) %>%
     do(drop1(aov(Thickness ~ Period, data = .), ~., test = "F"))
 
-#a basic pairwise comparison is not correct because
+#a basic pairwise comparison is not appropriate because
 #of vastly unequal sample sizes, a Tukey HSD is a post-hoc correction for this
 
 morph %>% filter(Genus == "Hordeum", !is.na(Thickness)) %>%
   do(tidy(TukeyHSD(aov(Thickness ~ Period, data = .)))) %>%
-    mutate(comparison = gsub("Nabataean-Roman", "NabataeanRoman", comparison)) %>%
-    separate(comparison, into = c("Per1", "Per2"), sep = "-") %>%
+    mutate(contrast = gsub("Nabataean-Roman", "NabataeanRoman", contrast)) %>%
+    separate(contrast, into = c("Per1", "Per2"), sep = "-") %>%
     arrange(conf.low) %>%
     filter(adj.p.value < .05) %>% kable(.)
 
-#this uses the Dunning method, which is more appropriate
+#this uses the Dunnett's pairwise multiple comparisons method, which is more appropriate
 #for unbalanced sample designs with unequal sample variances
-test = morph %>% filter(Genus == "Hordeum", !is.na(Thickness), !is.na(Period)) %>% 
-    droplevels %>%
-    do(tidy(DTK.test(.$Thickness,.$Period)[[2]])) %>%
-    mutate(.rownames = gsub("Nabataean-Roman", "NabataeanRoman", .rownames)) %>%
-    separate(.rownames, into = c("Per1", "Per2"), sep = "-")
+
+morph_clean_barley = morph %>% filter(Genus == "Hordeum", !is.na(Thickness), !is.na(Period))
+
+morph_clean_barley = droplevels(morph_clean_barley)
+
+dunnett_pairwise = as.data.frame(DTK.test(morph_clean_barley$Thickness, morph_clean_barley$Period)[[2]]) %>% 
+  rownames_to_column("contrast") %>%
+  mutate(contrast = gsub("Nabataean-Roman", "NabataeanRoman", contrast)) %>%
+  separate(contrast, into = c("Per1", "Per2"), sep = "-")
 
 #this now loops through the Dunning output looking for those periods
 #which are significantly different in terms of thickness for barley
-vec = vector("list", nrow(test))
+vec = vector("list", nrow(dunnett_pairwise))
 
-for(i in 1:nrow(test)){
-    vec[i] = between(0,test$Lower.CI[i],test$Upper.CI[i])
+for(i in 1:nrow(dunnett_pairwise)){
+    dunnett_pairwise[i, "sig"] = between(0,dunnett_pairwise$`Lower CI`[i],dunnett_pairwise$`Upper CI`[i])
 }
 
-test[unlist(vec) == FALSE,] %>% kable(.)
+dunnett_pairwise[dunnett_pairwise$sig == T,] %>% kable(.)
 
 #the variances across periods are similar for barley and wheat
 #but not between individual periods
@@ -581,7 +606,7 @@ library(car)
 morph %>% filter(Genus == "Hordeum", !is.na(Thickness), !is.na(Period)) %>%
     do(leveneTest(.$Thickness, .$Period, center = median))
 
-morph %>% filter(Genus == "Hordeum", !is.na(Thickness), !is.na(Period)) %>%
+morph %>% filter(Genus == "Triticum", !is.na(Thickness), !is.na(Period)) %>%
     do(leveneTest(.$Thickness, .$Period, center = median))
 
 #and now, the f-tests, which are reported in the paper
@@ -618,7 +643,7 @@ morph %>%
     geom_point(aes(colour = Period)) +
     theme_bw(base_size = 10) +
     stat_summary(fun.data = mean_cl_boot, colour = "red", size = .5, aes(shape = Period)) +
-    stat_summary(fun.y=mean, colour="red", geom="line", aes(group = 1)) +
+    stat_summary(fun=mean, colour="red", geom="line", aes(group = 1)) +
     theme(panel.grid = element_blank(), axis.text.x = element_text(angle = 45, hjust = 1),
           legend.position = "none") +
     facet_wrap(~Genus, scales="free_x") + ylab("Thickness (mm)") + xlab("")
