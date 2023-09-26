@@ -1,24 +1,49 @@
 ---
 title: "Supplement for 'A 2500-Year historical ecology of agricultural production under Empire in Dhiban, Jordan'"
 author: "Alan Farahani"
-output:
-  html_document: default
-  word_document: default
-  pdf_document: 
-    toc: yes
+output: 
+  bookdown::html_document2:
+    code_folding: show
+    df_print: paged
+    toc: true
+    toc_depth: 3
+    toc_float: 
+      collapsed: true
+    font_adjustment: +3
+    fig_caption: true
+    number_sections: true
+    global_numbering: true
 ---
 
+<style type="text/css">
+
+.main-container {
+  max-width: 1200px !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+pre code {
+  word-wrap: normal !important;
+  overflow-x: auto !important;
+  white-space: pre !important;
+  max-width: 1200px !important;
+}
+
+</style>
+
+
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE,tidy.opts=list(width.cutoff=55), tidy = TRUE)
+knitr::opts_chunk$set(echo = TRUE,tidy.opts=list(width.cutoff=150), tidy = FALSE)
 ```
 
-## Introduction
+# Introduction
 
-This document provides additional information regarding and the full ability to reproduce the analyses conducted in [Farahani, A. 2018. A 2500-Year historical ecology of agricultural production under Empire in Dhiban, Jordan. Journal of Anthropological Archaeology 52: 137-155.](https://pdf.sciencedirectassets.com/272558/1-s2.0-S0278416518X0004X/1-s2.0-S0278416518300515/am.pdf?X-Amz-Security-Token=IQoJb3JpZ2luX2VjEFkaCXVzLWVhc3QtMSJIMEYCIQC2Xnrcx1VLx%2FgXD10gpYPjEsxGO549J1IgQQ7AX7kShwIhANJ0wLR68Ij8MTjfV4dsveZ1C9Imj2CLK3MZhIHu6udgKrMFCFIQBRoMMDU5MDAzNTQ2ODY1Igyzco%2FxJnHa4%2FJyd2kqkAUU5a%2BGsYnWtYcgvPaQ4LvQ4yQbkexBWh%2F0jHj3tLpUQN9NHRe%2FxLvBwbRiXRhyhNgYuKZO5ajN6jwq7mDO6JxS9jX1UewCUb9G7MwTxhHqNUhseAHndL2df3v0WAL4pSawj5WeGJoGKcbCbOiw%2F6e9ZO0A13jxpRJ5Tfg1Nvi%2Bd1gfrgKRR6%2FDhAhxLR4Updht0TdlbyKdBgVoItb%2Flkb2u0OBc%2ByL6zktDIRmNCK7PhADE%2B50QHWY320HJg%2Fst93sUCDqKSZCEBNuJF%2B95%2BA9rPg3LL7mhvsz9kmr1V3Gg04JNKRL%2BoU%2Fdj1lQSAnGUzQP8Q3shBGwDZ3Jwaj7X2EjJDelcdYJjZbd2JUZT0JZZ%2B0IsMb2fjcl%2Fh1FqYpZ1CVwvUA7w%2BDFzcY5jbkaVXcDeP4FakGN3ZqUPmDz7q0aiRIhM2sw13aVl1FAx1%2Fuu6qpVxZwm2h4J0kaOL9ouHyp2231bQ1PrgzIL4uGG31RMRyvRItWGGWRTXdqs8adsLkSg5NHCYmpop8q6VbGZN6RY4HABZmEXIfldWpHng9aDz%2FkWN5L0L%2FR1q1G2Yt1Nt5A6UnBoH0hdm4wDYFGjoJEH8W0OagZAtu%2FgNfOPW%2F72rf2lcsaXAHUNJ9ZEbeecwxq7%2FCF%2Bxgl22bs5fkbff6um9VjRGke32AKVnXDPakTAMQFvcioApgP84yU3K8YWckgidk6cPidC%2F06DozRtH8tIBsjTHlviN5fKggukzI91vlx%2Ba%2B6N6Iifh4YH5x%2BoVMdq6%2B3hiukFhXALJY0FOj2EC93kmJjAeFBE62CQ1bmR6ewjVqGiY0sQPTxLPQvm1LKCIf0KJQfFeqAuFUiocuHN2n5tL9%2Bkmb2zR8mR%2F9NzC6q8OoBjqwAdWxvTarQcJkI0Yxy3DnQO9qUUTddZTsG33cLtcB2v95qDVvz6psHcCDGdf7x0VT38%2B8kSgoR83TOFHNeVWLX2w%2FkR3iN7KzTrwiRcieKNACtGkfTcPFEcywqqLgNUQh101XFRMSuYeku5AVcB%2BaFnJ4f4pKiFStwVWo01ehmTx0rVnNLj31LMSjYiPAq%2B9Su0Osm6qQWOWIoMM0UbJYIbUmkIGytijPCfoIJC1YT2Fg&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20230925T004522Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Credential=ASIAQ3PHCVTYSUR6AKC4%2F20230925%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=a6f161210de8bd29595c2a9c618f9f9b0a5809c893f4e0366e095c82c72764f7&hash=81283dba0c76ca73f6fa2c787dafc58d2f3aa9cb3514b6feecf57a53dbe385a8&host=68042c943591013ac2b2430a89b270f6af2c76d8dfd086a07176afe7c76c2c61&pii=S0278416518300515&tid=pdf-797ec5c6-6161-441b-a345-f83554c6ebb8&sid=fd531bfa1b667540714a0e28ad4dab3d57a9gxrqa&type=client).  The language in which this is written is R.  In the event that the R Markdown file is not available, this HTML document contains embedded code which must be copied into an R console (whether the regular R terminal or the R Studio IDE).  Once copied, the code below will reproduce nearly all of the analyses presented in the paper (and some additional ones as well).
+This document provides additional information regarding and the full ability to reproduce the analyses conducted in [Farahani, A. 2018. A 2500-Year historical ecology of agricultural production under Empire in Dhiban, Jordan. Journal of Anthropological Archaeology 52: 137-155.](https://pdf.sciencedirectassets.com/272558/1-s2.0-S0278416518X0004X/1-s2.0-S0278416518300515/am.pdf?X-Amz-Security-Token=IQoJb3JpZ2luX2VjEFkaCXVzLWVhc3QtMSJIMEYCIQC2Xnrcx1VLx%2FgXD10gpYPjEsxGO549J1IgQQ7AX7kShwIhANJ0wLR68Ij8MTjfV4dsveZ1C9Imj2CLK3MZhIHu6udgKrMFCFIQBRoMMDU5MDAzNTQ2ODY1Igyzco%2FxJnHa4%2FJyd2kqkAUU5a%2BGsYnWtYcgvPaQ4LvQ4yQbkexBWh%2F0jHj3tLpUQN9NHRe%2FxLvBwbRiXRhyhNgYuKZO5ajN6jwq7mDO6JxS9jX1UewCUb9G7MwTxhHqNUhseAHndL2df3v0WAL4pSawj5WeGJoGKcbCbOiw%2F6e9ZO0A13jxpRJ5Tfg1Nvi%2Bd1gfrgKRR6%2FDhAhxLR4Updht0TdlbyKdBgVoItb%2Flkb2u0OBc%2ByL6zktDIRmNCK7PhADE%2B50QHWY320HJg%2Fst93sUCDqKSZCEBNuJF%2B95%2BA9rPg3LL7mhvsz9kmr1V3Gg04JNKRL%2BoU%2Fdj1lQSAnGUzQP8Q3shBGwDZ3Jwaj7X2EjJDelcdYJjZbd2JUZT0JZZ%2B0IsMb2fjcl%2Fh1FqYpZ1CVwvUA7w%2BDFzcY5jbkaVXcDeP4FakGN3ZqUPmDz7q0aiRIhM2sw13aVl1FAx1%2Fuu6qpVxZwm2h4J0kaOL9ouHyp2231bQ1PrgzIL4uGG31RMRyvRItWGGWRTXdqs8adsLkSg5NHCYmpop8q6VbGZN6RY4HABZmEXIfldWpHng9aDz%2FkWN5L0L%2FR1q1G2Yt1Nt5A6UnBoH0hdm4wDYFGjoJEH8W0OagZAtu%2FgNfOPW%2F72rf2lcsaXAHUNJ9ZEbeecwxq7%2FCF%2Bxgl22bs5fkbff6um9VjRGke32AKVnXDPakTAMQFvcioApgP84yU3K8YWckgidk6cPidC%2F06DozRtH8tIBsjTHlviN5fKggukzI91vlx%2Ba%2B6N6Iifh4YH5x%2BoVMdq6%2B3hiukFhXALJY0FOj2EC93kmJjAeFBE62CQ1bmR6ewjVqGiY0sQPTxLPQvm1LKCIf0KJQfFeqAuFUiocuHN2n5tL9%2Bkmb2zR8mR%2F9NzC6q8OoBjqwAdWxvTarQcJkI0Yxy3DnQO9qUUTddZTsG33cLtcB2v95qDVvz6psHcCDGdf7x0VT38%2B8kSgoR83TOFHNeVWLX2w%2FkR3iN7KzTrwiRcieKNACtGkfTcPFEcywqqLgNUQh101XFRMSuYeku5AVcB%2BaFnJ4f4pKiFStwVWo01ehmTx0rVnNLj31LMSjYiPAq%2B9Su0Osm6qQWOWIoMM0UbJYIbUmkIGytijPCfoIJC1YT2Fg&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20230925T004522Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Credential=ASIAQ3PHCVTYSUR6AKC4%2F20230925%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=a6f161210de8bd29595c2a9c618f9f9b0a5809c893f4e0366e095c82c72764f7&hash=81283dba0c76ca73f6fa2c787dafc58d2f3aa9cb3514b6feecf57a53dbe385a8&host=68042c943591013ac2b2430a89b270f6af2c76d8dfd086a07176afe7c76c2c61&pii=S0278416518300515&tid=pdf-797ec5c6-6161-441b-a345-f83554c6ebb8&sid=fd531bfa1b667540714a0e28ad4dab3d57a9gxrqa&type=client).  The language in which this is written is R. The code below will reproduce nearly all of the analyses in the paper (and some additional ones as well).
 
 If there are any questions, please contact Alan Farahani at alanfarahani@gmail.com
 
-## Instructions for R Users
+# Instructions for R Users
 
 Reproducing the data requires the following programs and / or packages to be present.  First it is highly recommended that R Studio (or IDE equivalent) is used, with the latest version of `knitr`.  Moreover, most of the analyses presented below rely on the `tidyverse` ecosystem, or at least `dplyr` and `reshape2`.  The packages `vegan` and `bootstrap` are also critical.  See the libraries loaded at the beginning of the document for the full range of required packages that must be installed prior to use.  
 
@@ -26,13 +51,14 @@ Many of the commands have `%>% kable(.)` added to them, which enhances the reada
 
 Finally, ensure that the data are in the same folder as the R Markdown in order for it to successfully compile.
 
-## Supplementary Information Regarding Sorting Methodology
+# Supplementary information regarding sorting methodology
 
 All archaeological plant remains were separated, quantified, and identified down to the 0.5mm level using a stereoscopic microscope. Wood charcoal was counted and weighed at the >2mm mesh size, and only weighed, but not counted, at the 1mm mesh size. Identifiable and unidentifiable seed fragments were collected until the 1mm mesh level.  When possible, seed fragments identifiable to some taxonomic level were recorded as fragments of that item (e.g. "Fabaceae fragments"").  The only taxa whose fragments were included into the count of whole seeds were Poaceae (grasses) -- in cases where a Poaceae seed was fragmented but the embryo / scutellum was visible, that item was recorded as "Poaceae apex"", but included in the count of whole Poaceae.  Unidentifiable seed fragments were distinguished from "clinkered"" remains, which were classified by severe distortion to the point of an inability of recognition.  The quantification of rachis (chaff) remains was predicated on the number of identifiable rachis internodes if found on a spike-chain.  Non-botanical, organic remains such as shell, dung, and carbonized insect remains were also counted and identified down to the 0.5mm mesh size, although operationalized into larger categories. 
 
-## General Summary Statistics of Assemblage
+# General Summary Statistics of Assemblage
 
-```{r, echo = TRUE, message = FALSE, warning = FALSE}
+```{r, echo = TRUE, message = FALSE, warning = FALSE, fig.cap = "Count of identified plant remain categories by operationalized time periods."}
+
 library(tidyverse)
 library(reshape2)
 library(moments)
@@ -40,15 +66,13 @@ library(vegan)
 library(bootstrap)
 library(knitr)
 
-#note that the data frame is called "dhb.peb" which is used throughout the analyses
-#if the CSV has another file name, be sure to either change the CSV name
-#or change the path below
+# note that the data frame is called "dhb.peb" which is used throughout these analyses 
+# if the CSV has another file name, be sure to either change the CSV name or change the path below
 
 dhb.peb.mesh = read.csv("../data/dhb_raw_peb_data.csv")
 
-#the raw data includes each of the three sieve sizes used to process the material
-#this is removed for the subsequent analyses and all of the counts are aggregated
-#by sample number ("LF")
+# the raw data include each of the three sieve sizes used to process the material
+# this variable (sieve size) is removed for the subsequent analyses and all of the counts are aggregated by sample number ("LF")
 
 dhb.peb = dhb.peb.mesh %>% 
   select(-Mesh) %>% 
@@ -66,15 +90,12 @@ all.summary = dhb.peb %>%
     mutate(
         `Crop Seeds` = rowSums(select(.,DOMESTICATE_COUNTS:DOMESTICATE_WEIGHTS), na.rm=TRUE),
         `Weed Seeds` = rowSums(select(.,FAMILIES:UNKS_AND_FRAGS,-Poaceae_Frags), na.rm=TRUE),
-        `Seed Fragments (Identifiable)` = rowSums(select(.,DOM_FRAGS:FAMILIES, Poaceae_Frags,
-         -contains("wt")), na.rm=TRUE),
-        Rachises = rowSums(select(.,RACHIS_REMAINS:Wild_or_Weed_rachis, contains("rachis")),
-         na.rm=TRUE),
-        `Meso and Endocarp Fragments` = rowSums(select(.,contains("endo"), -contains("wt")),
-         na.rm=TRUE)
+        `Seed Fragments (Identifiable)` = rowSums(select(.,DOM_FRAGS:FAMILIES, Poaceae_Frags, -contains("wt")), na.rm=TRUE),
+        Rachises = rowSums(select(.,RACHIS_REMAINS:Wild_or_Weed_rachis, contains("rachis")), na.rm=TRUE),
+        `Meso and Endocarp Fragments` = rowSums(select(.,contains("endo"), -contains("wt")), na.rm=TRUE)
         ) %>%
     mutate(
-        `Seed Fragments (Unidentifiable)` = Clinker + Unidentifiable_seed_fragment, 
+        `Seed Fragments (Unidentifiable)` = Clinker + Unidentifiable_seed_fragment,
         `Unidentified Seeds` = Unknown_fruit_seed + Unknown_non_Poaceae,
         `Cereal Stems and Roots` = Poaceae_culm + Poaceae_root,
         `Charcoal (>2mm)` = Charcoal_ct,
@@ -89,9 +110,10 @@ all.summary = setNames(data.frame(t(all.summary[,-1])), all.summary[,1])
 all.summary %>% kable(.)
 ```
 
-This is a graph of the latter table:
+**This is a graph of the latter table**:
 
-```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 12, fig.height = 8}
+```{r, echo = TRUE, message = FALSE, warning = FALSE, fig.width = 12, fig.height = 8}
+
 dhb.peb %>% 
     mutate(
         `Crop Seeds` = rowSums(select(.,DOMESTICATE_COUNTS:DOMESTICATE_WEIGHTS), na.rm=TRUE),
@@ -136,14 +158,16 @@ dhb.peb %>%
   mutate(N = 1) %>% 
   group_by(Period, Context) %>%
   summarise(N = sum(N), Volume = sum(Vol_L)) %>%
-  dcast(Period ~ Context, value.var = "N", fill = "-") %>% kable(.)
+  dcast(Period ~ Context, value.var = "N", fill = "-") %>%
+  kable(.)
 
 #now, by volume
 dhb.peb %>%
   mutate(N = 1) %>%
   group_by(Period, Context) %>%
   summarise(N = sum(N), Volume = sum(Vol_L)) %>%
-  dcast(Period ~ Context, value.var = "Volume", fill = "-") %>% kable(.)
+  dcast(Period ~ Context, value.var = "Volume", fill = "-") %>%
+  kable(.)
 
 ```
 
@@ -172,6 +196,7 @@ dhb.peb %>%
     zlab("Weed\n Seeds")
 ```
 
+# Primary Analyses
 
 ## All Major Crops Encountered by Period
 
@@ -179,10 +204,9 @@ All of the major crops present or absent in each period are displayed below.  Se
 
 ```{r, echo = TRUE, message = FALSE, warning = FALSE, fig.width = 8}
 
-#this codes the Olea fragment as a count of at least one Olea for the Middle Islamic II Period
-#this is because there were Olea fragments found in the heavy fraction for this period
-#although this count is not reported as such in the overview of the domesticates in the article
-#as it was not found in the light fraction
+# this codes the Olea fragment as a count of at least one Olea for the Middle Islamic II Period
+# this is because there were Olea fragments found in the heavy fraction for this period
+# although this count is not reported as such in the overview of the domesticates in the article as it was not found in the light fraction
 
 dhb.peb[dhb.peb$LF == 209, "Olea_sp"] = 1
 
@@ -214,6 +238,10 @@ ggplot(aes(reorder(variable, desc(value)), Period)) +
 The following produces a rather lengthy list of the identified remains aggregated by period.  The code relies on a later snippet that is used for the bootstrapping of the domesticate ubiquities.
 
 ```{r, echo = TRUE, message = FALSE, warning = FALSE}
+
+# I recognize that this is an absurdly long method-chain that could benefit from being broken up
+# in order to enhance legibility.  I might do that in the future if there is any interest / need
+
 tot.sum = dhb.peb %>% filter(Period != "Iron I") %>%
   mutate(
     `Crop Seeds` = rowSums(select(.,DOMESTICATE_COUNTS:DOMESTICATE_WEIGHTS), na.rm=TRUE),
@@ -312,6 +340,11 @@ for (i in 1:length(periods)){
     
 }
 
+text(x = 800, y = 5, label = "Iron II", col = redtrans, font = 2)
+text(x = 800, y = 4, label = "Late Byzantine", col = lightbluetrans, font = 2)
+text(x = 800, y = 3, label = "Late Antique Transitional", col = chartrans, font = 2)
+text(x = 800, y = 2, label = "Middle Islamic II", col = purpletrans, font = 2)
+
 #classic rarefaction of the data, by individuals
 
 for (i in 1:length(periods)){
@@ -349,6 +382,11 @@ for (i in 1:length(periods)){
     }
     
 }
+
+text(x = 800, y = 5, label = "Iron II", col = redtrans, font = 2)
+text(x = 800, y = 4, label = "Late Byzantine", col = lightbluetrans, font = 2)
+text(x = 800, y = 3, label = "Late Antique Transitional", col = chartrans, font = 2)
+text(x = 800, y = 2, label = "Middle Islamic II", col = purpletrans, font = 2)
 
 ```
 
@@ -428,53 +466,53 @@ dom = dhb.peb %>%
 #using these taxa, recode so that they are present or absent
 #and save this as a new data frame minus two periods
 
-temp = dom %>% 
+doms_for_boot = dom %>% 
     #the following line can be included as necessary
     #mutate(Rem_Doms = All_Doms - rowSums(select(.,Triticum:Vitis))) %>%
     select(-c(LF, Vol_L, All_Doms)) %>%
     filter(Period != "Iron I" & Period != "Ottoman") %>%
-    mutate_if(is.numeric, funs(ifelse((.)>0,1,0))) %>%
+    mutate_if(is.numeric, ~(ifelse((.)>0,1,0))) %>%
     droplevels(.) %>% as.data.frame(.)
 
 #now loop through the data frame, extracting each period
 #bootstrapping the taxa in each period, saving those in a list
 #and then combining the whole list 
 
-test = vector("list", 6)
+booted_doms = vector("list", 6)
 
-for (i in 1:length(levels(temp$Period))){
-    per =  levels(temp$Period)[i]
-    n = filter(temp, Period == per)
-    for (z in 1:length(temp[,-1])){
+for (i in 1:length(levels(doms_for_boot$Period))){
+    per =  levels(doms_for_boot$Period)[i]
+    n = filter(doms_for_boot, Period == per)
+    for (z in 1:length(doms_for_boot[,-1])){
         p = n
         p = p[,-1]
         boo = bootstrap(p[,z], 1000, function(x) mean(x))$thetastar
-        test[[i]][[z]] = list(mean = mean(p[,z]),
+        booted_doms[[i]][[z]] = list(mean = mean(p[,z]),
                                mean_boot = mean(boo),
                                high = quantile(boo, .95),
                                low = quantile(boo, .05),
                                Period = per,
-                               Taxon = names(temp[z+1]),
+                               Taxon = names(doms_for_boot[z+1]),
                                TimeOp = i,
-                               N = nrow(temp[temp$Period == per,]))
+                               N = nrow(doms_for_boot[doms_for_boot$Period == per,]))
         
     }
 }
 
 #combine the list with bind_rows and map_df from purrr
-test = test %>% 
+booted_doms = booted_doms %>% 
   map_df(bind_rows)
   #pipe this in if necessary with %>%
   #mutate_at(vars(mean:low), function(x) round(x*100, 1))
 
-test = test %>% mutate(Period_N = as.factor(paste(Period, " (N = ", N,")", sep = "")), 
+booted_doms = booted_doms %>% mutate(Period_N = as.factor(paste(Period, " (N = ", N,")", sep = "")), 
                         Period = as.factor(Period)) %>% select(-N)
-test$Period_N = factor(test$Period_N, levels = levels(test$Period_N)[c(1,6,3,2,4,5)])
-test$Period = factor(test$Period, levels = levels(test$Period)[c(1,6,3,2,4,5)])
+booted_doms$Period_N = factor(booted_doms$Period_N, levels = levels(booted_doms$Period_N)[c(1,6,3,2,4,5)])
+booted_doms$Period = factor(booted_doms$Period, levels = levels(booted_doms$Period)[c(1,6,3,2,4,5)])
 
-rm(n,p,boo,i,per,z, temp)
+rm(n,p,boo,i,per,z, doms_for_boot)
 
-test %>% kable(.)
+booted_doms %>% kable(.)
 
 ```
 
@@ -482,7 +520,7 @@ test %>% kable(.)
 
 The calculations for the weighted proportions can be seen in the code below, as well as that used to generate the graph.
 
-```{r, echo = TRUE, warning = FALSE, message = FALSE}
+```{r, echo = TRUE, warning = FALSE, message = FALSE, fig.width = 12, fig.height = 8}
 dom.summary = dom %>%
     #mutate(Rem_Doms = All_Doms - rowSums(select(.,Triticum:Vitis))) %>%
     filter(Period != "Iron I" & Period != "Ottoman") %>%
@@ -509,17 +547,19 @@ dom.summary = dom %>%
     mutate_at(vars(Ubiq_prop:Mean_Prop,CT_Prop), funs(round(., 2))) %>% as.data.frame()
 
 dom.summary %>% kable(.)
+```
 
+```{r, echo = TRUE, warning = FALSE, message = FALSE, fig.height = 7, fig.width = 10}
 #this generates a graph that combines the bootstrapped ubiquity data
 #with aspects of the weighted proportion summary above
 
-test %>%
+booted_doms %>%
     left_join(dom.summary %>% select(Period, Taxon, WT_Prop), by = c("Period", "Taxon")) %>%
     ggplot(aes(Period,mean))+
     geom_point(alpha=.95,shape = 21, aes(size = WT_Prop, fill = WT_Prop))+
     scale_fill_continuous(low="red", high="green") +
-    theme_bw(base_size = 10)+
-    ylab("Proportion of Total Samples")+
+    theme_bw(base_size = 13)+
+    ylab("\nProportion of Total Samples")+
     xlab("")+
     facet_wrap(~Taxon, nrow = 2) +
     geom_hline(aes(yintercept=.5), colour="#990000", linetype="dashed")+
@@ -527,7 +567,7 @@ test %>%
     geom_line(aes(group=1)) + 
     theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = "bottom") +
     coord_flip() +
-    guides(fill=guide_legend(nrow = 1), size = guide_legend())
+    guides(fill=guide_legend(nrow = 1, title = "Weighted Proportion \n(by count)"), size = guide_legend(title = "Weighted Proportion \n(by count)"))
 
 ```
 
@@ -630,9 +670,10 @@ var.test(
       filter(Genus == "Triticum", !is.na(Thickness), !is.na(Period)) %>% 
       filter(Period == "Middle Islamic II") %>% pull(Thickness)
     )
+```
 
-#this plots the data using a normal_cl_boot
-#hacky fix for the levels
+```{r, echo = TRUE, message = FALSE, warning = FALSE, fig.height=5, fig.width=10}
+# this plots the data using a normal_cl_boot with a hacky fix for the levels
 morph %>%
     add_count(Genus, Period) %>%
     filter(!is.na(Period), !is.na(Thickness)) %>%
@@ -641,10 +682,11 @@ morph %>%
     mutate(Period2 = factor(Period2, levels = levels(Period2)[c(1,2,11,12,3,4,5,6,7,8,9,10)])) %>%
     ggplot(aes(Period2, Thickness)) +
     geom_point(aes(colour = Period)) +
-    theme_bw(base_size = 10) +
+    theme_bw(base_size = 14) +
     stat_summary(fun.data = mean_cl_boot, colour = "red", size = .5, aes(shape = Period)) +
     stat_summary(fun=mean, colour="red", geom="line", aes(group = 1)) +
-    theme(panel.grid = element_blank(), axis.text.x = element_text(angle = 45, hjust = 1),
+    theme(panel.grid = element_blank(),
+          axis.text.x = element_text(angle = 45, hjust = 1),
           legend.position = "none") +
     facet_wrap(~Genus, scales="free_x") + ylab("Thickness (mm)") + xlab("")
 
