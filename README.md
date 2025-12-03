@@ -48,7 +48,7 @@ I argued that these shifts were more likely a product of changes in socio-cultur
 
 *Note that the data in this repository are recent up to the point of this specific study in 2018 -- newer samples, radiocarbon dates, and other data from archaeological research at Dhiban will be housed in a new repository (timeline and link TBD)*.
 
-See the compiled analyses and figures **<a href = "http://thebalkarchaeology.com/markdowns/dhiban_peb.html" target = "_new"> here</a>**.
+See the compiled analyses and figures **<a href = "http://alanfarahani.com/markdowns/dhiban_peb.html" target = "_new"> here</a>**.
 
 For more about the archaeological site of Dhiban, see: 
 
@@ -56,7 +56,7 @@ For more about the archaeological site of Dhiban, see:
 
 - [Fatkin, D.S., Adelsberger, K., Farahani, A., Fischer, A., Kansa, S.W., Lev-Tov, J., Morgan, C., Porter, B., Routledge, B. and A. Wilson. 2011. Digging deeper: Technical reports from the Dhiban Excavation and Development Project (2004-2009). Annual of the Department of Antiquities of Jordan 55:249-266.](https://escholarship.org/content/qt44m7f3mz/qt44m7f3mz.pdf)
 
-- [Porter, B. W., D. Steen, and F. al-Kawamlha. 2007. The Power of Place: The Dhiban Community Through the Ages. In Crossing Jordan: North American Contributions to the Archaeology of Jordan, edited by T. E. Levy, M. P. M. Daviau, R. W. Younker, and M. Shaer, pp. 315–322. London: Equinox Publishing.](http://www.thebalkarchaeology.com/power_of_place.pdf)
+- Porter, B. W., D. Steen, and F. al-Kawamlha. 2007. The Power of Place: The Dhiban Community Through the Ages. In Crossing Jordan: North American Contributions to the Archaeology of Jordan, edited by T. E. Levy, M. P. M. Daviau, R. W. Younker, and M. Shaer, pp. 315–322. London: Equinox Publishing.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
